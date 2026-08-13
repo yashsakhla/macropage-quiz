@@ -10,7 +10,7 @@ export default function AdminSessionsPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [title, setTitle] = useState("");
-  const [triviaCount, setTriviaCount] = useState<string>("10");
+  const [triviaCount, setTriviaCount] = useState<string>("0");
   const [shapeError, setShapeError] = useState<string | null>(null);
 
   const { data: sessions, isLoading, isError } = useQuery({
@@ -88,14 +88,14 @@ export default function AdminSessionsPage() {
         <label className="text-sm font-semibold text-brand-charcoal/70">
           Random trivia question count (0 for mindset-only)
         </label>
-        <input
+        {/* <input
           type="number"
           min={0}
           max={50}
           value={triviaCount}
           onChange={(e) => setTriviaCount(e.target.value)}
           className="rounded-xl border border-black/10 bg-white px-4 py-3 text-base outline-none focus:border-brand-orange"
-        />
+        /> */}
         {mutation.isError && (
           <p className="text-sm text-red-600">
             {(mutation.error as Error).message || "Failed to create session."}

@@ -18,11 +18,13 @@ export interface Participant {
 export interface QuizOption {
   key: OptionKey;
   text: string;
+  textHi?: string;
 }
 
 export interface QuizQuestion {
   id: string;
   text: string;
+  textHi?: string;
   order: number;
   timeLimitSeconds: number;
   dimension: string;
@@ -80,9 +82,14 @@ export interface AnalysisReport {
   };
   reportJson: {
     headline: string;
+    headlineHi?: string;
     businessSnapshot: string;
+    businessSnapshotHi?: string;
     mindsetProfile: string;
+    mindsetProfileHi?: string;
     goalRoadmap: string[];
+    goalRoadmapHi?: string[];
     techRecommendation: string;
+    techRecommendationHi?: string;
   };
 }

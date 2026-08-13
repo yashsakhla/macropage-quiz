@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -116,7 +117,14 @@ export default function AdminSessionControlPage() {
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
-      <div className="flex items-center justify-between">
+      <Link
+        href="/admin/sessions"
+        className="inline-flex items-center gap-1 text-sm font-semibold text-brand-charcoal/60 hover:text-brand-orange"
+      >
+        ← Back to sessions
+      </Link>
+
+      <div className="mt-4 flex items-center justify-between">
         <h1 className="font-headline text-3xl text-brand-charcoal">Session control</h1>
         <span className="rounded-full bg-brand-orange/10 px-4 py-1 text-sm font-semibold text-brand-orange">
           {status?.replace("_", " ") ?? "loading…"}
@@ -242,7 +250,14 @@ export default function AdminSessionControlPage() {
                 </tr>
               </thead>
               <tbody>
-                {participants?.map((p: Participant) => (
+                {[...(participants ?? [])]
+                  .sort((a, b) => {
+                    if (a.rank == null && b.rank == null) return (b.score ?? 0) - (a.score ?? 0);
+                    if (a.rank == null) return 1;
+                    if (b.rank == null) return -1;
+                    return a.rank - b.rank;
+                  })
+                  .map((p: Participant) => (
                   <tr key={p.id} className="border-t border-black/5">
                     <td className="px-4 py-3">{p.rank ?? "—"}</td>
                     <td className="px-4 py-3">{p.name}</td>

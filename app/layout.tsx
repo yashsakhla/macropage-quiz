@@ -3,8 +3,7 @@ import { Inter, Bitter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/lib/providers";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { Logo } from "@/components/Logo";
+import { Header } from "@/components/Header";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -36,8 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col antialiased">
         <Providers>
           <LanguageProvider>
-            <Logo />
-            <LanguageSwitcher />
+            <Header />
             {children}
           </LanguageProvider>
         </Providers>

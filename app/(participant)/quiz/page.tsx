@@ -13,7 +13,7 @@ const ADVANCE_DELAY_MS = 1200;
 
 export default function QuizPage() {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [participantId, setParticipantId] = useState<string | null>(null);
   const [questions, setQuestions] = useState<QuizQuestion[] | null>(null);
@@ -116,7 +116,7 @@ export default function QuizPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col bg-tech-grid px-5 py-8 text-white">
+    <main className="flex min-h-screen flex-col bg-tech-grid px-5 pb-8 pt-24 text-white">
       <div className="flex items-center justify-between">
         <span className="font-mono text-sm font-medium text-white/60">
           {t("quiz", "questionLabel")} {String(questionIndex + 1).padStart(2, "0")} /{" "}
@@ -129,9 +129,11 @@ export default function QuizPage() {
         />
       </div>
 
-      <h1 className="font-headline mt-8 text-3xl leading-snug">{question.text}</h1>
+      <h1 className="font-headline mt-6 text-xl leading-snug">
+        {lang === "hi" && question.textHi ? question.textHi : question.text}
+      </h1>
 
-      <div className="mt-10 flex flex-1 flex-col gap-4">
+      <div className="mt-6 flex flex-1 flex-col gap-2.5">
         {question.options.map((option) => {
           const isSelected = selectedOption === option.key;
           return (
@@ -139,20 +141,20 @@ export default function QuizPage() {
               key={option.key}
               onClick={() => handleSelect(option.key)}
               disabled={!!selectedOption || timeUp}
-              className={`flex items-center gap-4 rounded-2xl border-2 px-5 py-6 text-left text-lg font-medium transition-all active:scale-[0.98] disabled:active:scale-100 ${
+              className={`flex items-center gap-3 rounded-xl border-2 px-3.5 py-3 text-left text-sm font-medium transition-all active:scale-[0.98] disabled:active:scale-100 ${
                 isSelected
                   ? "border-brand-orange bg-brand-orange text-white"
                   : "border-white/15 bg-white/5 text-white hover:border-white/30"
               }`}
             >
               <span
-                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full font-headline text-sm ${
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-headline text-xs ${
                   isSelected ? "bg-white text-brand-orange" : "bg-white/10 text-white/70"
                 }`}
               >
                 {option.key}
               </span>
-              {option.text}
+              {lang === "hi" && option.textHi ? option.textHi : option.text}
             </button>
           );
         })}

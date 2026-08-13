@@ -26,6 +26,17 @@ function JoinForm() {
     const existingSessionId = localStorage.getItem("sessionId");
     const existingParticipantId = localStorage.getItem("participantId");
 
+    // A session id in the URL that differs from the stored one means the user is
+    // joining a different quiz — clear the stale participant so they register fresh
+    // instead of being resumed/redirected into their old quiz's results.
+    if (sessionId && existingSessionId && sessionId !== existingSessionId) {
+      localStorage.removeItem("sessionId");
+      localStorage.removeItem("participantId");
+      localStorage.removeItem("sessionToken");
+      setCheckingResume(false);
+      return;
+    }
+
     if (!existingSessionId || !existingParticipantId) {
       setCheckingResume(false);
       return;
@@ -38,7 +49,7 @@ function JoinForm() {
         else router.replace("/waiting");
       })
       .catch(() => setCheckingResume(false));
-  }, [router]);
+  }, [router, sessionId]);
 
   const mutation = useMutation({
     mutationFn: () => registerParticipant(sessionId, name, whatsappNumber),

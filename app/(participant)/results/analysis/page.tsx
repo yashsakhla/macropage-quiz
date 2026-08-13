@@ -8,18 +8,26 @@ import { AiThinking } from "@/components/AiThinking";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 const ANALYSIS_MAX_ATTEMPTS = 3;
+const MIN_LOADING_MS = 10000;
 
 /** Retries the live analysis a few times, then quietly falls back to a static
  *  report so a transient API outage never surfaces as a broken screen. */
 async function fetchAnalysisWithFallback(participantId: string) {
-  for (let attempt = 1; attempt <= ANALYSIS_MAX_ATTEMPTS; attempt++) {
-    try {
-      return await requestAnalysis(participantId);
-    } catch {
-      if (attempt === ANALYSIS_MAX_ATTEMPTS) return buildStaticAnalysis(participantId);
+  const minDelay = new Promise((resolve) => setTimeout(resolve, MIN_LOADING_MS));
+
+  async function fetchReport() {
+    for (let attempt = 1; attempt <= ANALYSIS_MAX_ATTEMPTS; attempt++) {
+      try {
+        return await requestAnalysis(participantId);
+      } catch {
+        if (attempt === ANALYSIS_MAX_ATTEMPTS) return buildStaticAnalysis(participantId);
+      }
     }
+    return buildStaticAnalysis(participantId);
   }
-  return buildStaticAnalysis(participantId);
+
+  const [report] = await Promise.all([fetchReport(), minDelay]);
+  return report;
 }
 
 function ScoreGauge({ score, label }: { score: number; label: string }) {
@@ -52,7 +60,7 @@ function ScoreGauge({ score, label }: { score: number; label: string }) {
 }
 
 export default function AnalysisPage() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [participantId, setParticipantId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -68,8 +76,19 @@ export default function AnalysisPage() {
     retry: false,
   });
 
+  const isHi = lang === "hi";
+  const headline = (isHi && report?.reportJson.headlineHi) || report?.reportJson.headline;
+  const businessSnapshot =
+    (isHi && report?.reportJson.businessSnapshotHi) || report?.reportJson.businessSnapshot;
+  const mindsetProfile =
+    (isHi && report?.reportJson.mindsetProfileHi) || report?.reportJson.mindsetProfile;
+  const goalRoadmap =
+    (isHi && report?.reportJson.goalRoadmapHi) || report?.reportJson.goalRoadmap;
+  const techRecommendation =
+    (isHi && report?.reportJson.techRecommendationHi) || report?.reportJson.techRecommendation;
+
   return (
-    <main className="min-h-screen bg-tech-grid px-6 py-16 text-white">
+    <main className="min-h-screen bg-tech-grid px-6 pb-16 pt-28 text-white">
       {isPending || !report ? (
         <div className="flex min-h-[70vh] items-center justify-center">
           <AiThinking />
@@ -80,7 +99,7 @@ export default function AnalysisPage() {
             <p className="text-sm uppercase tracking-widest text-brand-orange">
               {t("analysis", "reportLabel")}
             </p>
-            <h1 className="font-headline mt-2 text-3xl leading-tight">{report.reportJson.headline}</h1>
+            <h1 className="font-headline mt-2 text-3xl leading-tight">{headline}</h1>
           </div>
 
           <ScoreGauge score={report.techScore} label={t("analysis", "techScoreLabel")} />
@@ -96,14 +115,14 @@ export default function AnalysisPage() {
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-widest text-white/50">
               {t("analysis", "snapshotLabel")}
             </h2>
-            <p className="text-white/80 leading-relaxed">{report.reportJson.businessSnapshot}</p>
+            <p className="text-white/80 leading-relaxed">{businessSnapshot}</p>
           </section>
 
           <section>
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-widest text-white/50">
               {t("analysis", "mindsetLabel")}
             </h2>
-            <p className="text-white/80 leading-relaxed">{report.reportJson.mindsetProfile}</p>
+            <p className="text-white/80 leading-relaxed">{mindsetProfile}</p>
           </section>
 
           <section>
@@ -111,7 +130,7 @@ export default function AnalysisPage() {
               {t("analysis", "roadmapLabel")}
             </h2>
             <ul className="flex flex-col gap-3">
-              {report.reportJson.goalRoadmap.map((step, i) => (
+              {goalRoadmap?.map((step, i) => (
                 <li key={i} className="flex items-start gap-3 rounded-xl bg-white/5 p-4">
                   <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-orange text-xs font-bold">
                     {i + 1}
@@ -126,7 +145,7 @@ export default function AnalysisPage() {
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-widest text-brand-orange">
               {t("analysis", "recommendationLabel")}
             </h2>
-            <p className="text-white/90 leading-relaxed">{report.reportJson.techRecommendation}</p>
+            <p className="text-white/90 leading-relaxed">{techRecommendation}</p>
             <p className="mt-4 text-sm text-white/60">
               {t("analysis", "ctaText")}{" "}
               <a href="https://macropage.in" className="font-semibold text-brand-orange underline">

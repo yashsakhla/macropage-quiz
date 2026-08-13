@@ -14,7 +14,7 @@ export function LanguageSwitcher() {
   return (
     <div
       className={clsx(
-        "fixed right-3 top-3 z-50 flex gap-1 rounded-full p-1 shadow-lg backdrop-blur",
+        "flex gap-1 rounded-full p-1 shadow-lg backdrop-blur",
         dark ? "bg-white/10 border border-white/15" : "bg-white/90 border border-black/10"
       )}
     >
