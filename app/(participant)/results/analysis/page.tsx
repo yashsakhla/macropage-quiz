@@ -153,6 +153,15 @@ export default function AnalysisPage() {
               </a>
             </p>
           </section>
+
+          <a
+            href="https://wa.me/15553612968?text=Hi%2C%20I%20need%20help%20in%20Business%20Automation."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full rounded-2xl bg-brand-orange px-6 py-5 text-center text-lg font-semibold text-white shadow-lg shadow-brand-orange/20 transition-all hover:brightness-110 active:scale-[0.98]"
+          >
+            {t("analysis", "automateButton")}
+          </a>
         </div>
       )}
     </main>

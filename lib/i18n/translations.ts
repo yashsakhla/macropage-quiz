@@ -188,6 +188,11 @@ export const translations = {
       hinglish: "Yeh soch apne business pe apply karwana chahte ho?",
     },
     techScoreLabel: { en: "tech score", hi: "टेक स्कोर", hinglish: "tech score" },
+    automateButton: {
+      en: "Automate Your Business",
+      hi: "अपना बिज़नेस ऑटोमेट करें",
+      hinglish: "Apna Business Automate Karo",
+    },
   },
   aiThinking: {
     lines: {

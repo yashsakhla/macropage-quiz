@@ -10,6 +10,7 @@ import { useLanguage } from "@/lib/i18n/LanguageContext";
 import type { OptionKey, QuizQuestion } from "@/lib/types";
 
 const ADVANCE_DELAY_MS = 1200;
+const QUESTION_TIME_LIMIT_SECONDS = 25;
 
 export default function QuizPage() {
   const router = useRouter();
@@ -123,7 +124,7 @@ export default function QuizPage() {
           {String(questions?.length ?? 0).padStart(2, "0")}
         </span>
         <CountdownRing
-          totalSeconds={question.timeLimitSeconds}
+          totalSeconds={QUESTION_TIME_LIMIT_SECONDS}
           startedAt={startedAt}
           onExpire={handleExpire}
         />
