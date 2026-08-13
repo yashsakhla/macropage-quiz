@@ -3,8 +3,24 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { requestAnalysis } from "@/lib/api";
+import { buildStaticAnalysis } from "@/lib/staticAnalysis";
 import { AiThinking } from "@/components/AiThinking";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+
+const ANALYSIS_MAX_ATTEMPTS = 3;
+
+/** Retries the live analysis a few times, then quietly falls back to a static
+ *  report so a transient API outage never surfaces as a broken screen. */
+async function fetchAnalysisWithFallback(participantId: string) {
+  for (let attempt = 1; attempt <= ANALYSIS_MAX_ATTEMPTS; attempt++) {
+    try {
+      return await requestAnalysis(participantId);
+    } catch {
+      if (attempt === ANALYSIS_MAX_ATTEMPTS) return buildStaticAnalysis(participantId);
+    }
+  }
+  return buildStaticAnalysis(participantId);
+}
 
 function ScoreGauge({ score, label }: { score: number; label: string }) {
   const radius = 54;
@@ -46,9 +62,10 @@ export default function AnalysisPage() {
 
   const { data: report, isPending } = useQuery({
     queryKey: ["analysis", participantId],
-    queryFn: () => requestAnalysis(participantId as string),
+    queryFn: () => fetchAnalysisWithFallback(participantId as string),
     enabled: !!participantId,
     staleTime: Infinity,
+    retry: false,
   });
 
   return (

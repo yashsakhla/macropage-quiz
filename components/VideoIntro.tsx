@@ -54,29 +54,29 @@ export function VideoIntro({ onComplete }: VideoIntroProps) {
       </video>
 
       {phase === "start" && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 bg-brand-charcoal/70 px-6 text-center backdrop-blur-sm">
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-1 bg-brand-charcoal/70 px-6 text-center backdrop-blur-sm">
           {/* eslint-disable-next-line @next/next/no-img-element -- static brand mark, no need for next/image optimization */}
           <img
-            src="/macropage-connect-white.svg"
+            src="/macropage-white.png"
             alt="MACROPAGE"
-            className="h-10 w-auto animate-fade-in sm:h-12"
+            className="h-50 w-auto animate-fade-in sm:h-48"
           />
           <button
             onClick={handleStart}
-            className="group relative flex items-center gap-3 overflow-hidden border border-brand-orange/70 bg-brand-charcoal px-10 py-4 font-mono text-base font-semibold uppercase tracking-[0.3em] text-brand-orange shadow-[0_0_25px_rgba(255,66,8,0.35)] transition-transform active:scale-[0.96]"
+            className="group relative flex items-center gap-2 overflow-hidden border border-brand-orange/70 bg-brand-charcoal/80 px-5 py-2 font-mono text-sm font-semibold uppercase tracking-[0.25em] text-brand-orange shadow-[0_0_20px_rgba(255,66,8,0.3)] backdrop-blur-sm transition-all duration-200 hover:shadow-[0_0_28px_rgba(255,66,8,0.5)] active:scale-[0.95]"
           >
-            <span className="absolute -left-px -top-px h-3 w-3 border-l-2 border-t-2 border-brand-orange" />
-            <span className="absolute -right-px -top-px h-3 w-3 border-r-2 border-t-2 border-brand-orange" />
-            <span className="absolute -bottom-px -left-px h-3 w-3 border-b-2 border-l-2 border-brand-orange" />
-            <span className="absolute -bottom-px -right-px h-3 w-3 border-b-2 border-r-2 border-brand-orange" />
+            <span className="absolute -left-px -top-px h-2 w-2 border-l-2 border-t-2 border-brand-orange transition-all duration-200 group-hover:h-2.5 group-hover:w-2.5" />
+            <span className="absolute -right-px -top-px h-2 w-2 border-r-2 border-t-2 border-brand-orange transition-all duration-200 group-hover:h-2.5 group-hover:w-2.5" />
+            <span className="absolute -bottom-px -left-px h-2 w-2 border-b-2 border-l-2 border-brand-orange transition-all duration-200 group-hover:h-2.5 group-hover:w-2.5" />
+            <span className="absolute -bottom-px -right-px h-2 w-2 border-b-2 border-r-2 border-brand-orange transition-all duration-200 group-hover:h-2.5 group-hover:w-2.5" />
 
             <span className="pointer-events-none absolute inset-0 overflow-hidden">
-              <span className="absolute inset-x-0 h-8 bg-gradient-to-b from-transparent via-brand-orange/25 to-transparent animate-scan-line" />
+              <span className="absolute inset-x-0 h-6 bg-gradient-to-b from-transparent via-brand-orange/25 to-transparent animate-scan-line" />
             </span>
 
-            <span className="relative flex h-2 w-2">
+            <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-orange/70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-orange" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-orange" />
             </span>
             <span className="relative">START</span>
           </button>
@@ -85,7 +85,7 @@ export function VideoIntro({ onComplete }: VideoIntroProps) {
 
       <div
         className={clsx(
-          "pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-8 bg-brand-charcoal px-6 text-center transition-opacity duration-700 ease-out",
+          "pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-1 bg-brand-charcoal px-6 text-center transition-opacity duration-700 ease-out",
           phase === "logo" ? "opacity-100" : "opacity-0"
         )}
       >
@@ -98,9 +98,9 @@ export function VideoIntro({ onComplete }: VideoIntroProps) {
 
         {/* eslint-disable-next-line @next/next/no-img-element -- static brand mark, no need for next/image optimization */}
         <img
-          src="/macropage-connect-white.svg"
+          src="/macropage-white.png"
           alt="MACROPAGE"
-          className="animate-fade-in h-16 w-auto sm:h-20"
+          className="animate-fade-in h-50 w-auto sm:h-48"
           style={{ animationDelay: "0.15s" }}
         />
 
@@ -116,9 +116,12 @@ export function VideoIntro({ onComplete }: VideoIntroProps) {
       {phase !== "start" && (
         <button
           onClick={finish}
-          className="absolute bottom-6 right-6 z-10 rounded-full border border-white/30 px-4 py-2 font-mono text-xs text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
+          aria-label="Skip"
+          className="absolute bottom-6 right-6 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/30 text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10"
         >
-          Skip
+          <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
+            <path d="M5 5l9 7-9 7V5zm10 0h2v14h-2V5z" />
+          </svg>
         </button>
       )}
     </div>
